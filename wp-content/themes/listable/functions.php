@@ -505,3 +505,62 @@ add_filter( 'pre_option_wc_social_login_text', 'change_social_login_text_option'
 
 //Enqueue WPJM core's frontend style
 add_filter( 'job_manager_enqueue_frontend_style', '__return_true' );
+
+
+function hide_menu()
+{
+    global $current_user;
+    $user_id = get_current_user_id();
+    if ($user_id != '1') {
+
+        // To remove the whole Appearance admin menu you would use;
+        // remove_menu_page('themes.php');
+
+        // To remove the theme editor and theme options submenus from
+        // the Appearance admin menu, as well as the main 'Themes'
+        // submenu you would use
+        // remove_menu_page('index.php');
+
+        // Remove Dashboard -> Submenu items
+        remove_submenu_page('index.php', 'update-core.php');
+        remove_submenu_page('index.php', 'smyles-licenses');
+
+        // Themes
+        // remove_submenu_page('themes.php', 'themes.php');
+        // remove_submenu_page('themes.php', 'theme-editor.php');
+        // remove_submenu_page('themes.php', 'theme_options');
+
+        // Users
+        // remove_menu_page('users.php');
+        // remove_submenu_page('users.php', 'user-new.php');
+        // remove_submenu_page('users.php', 'profile.php');
+
+        // Media
+        // remove_menu_page('upload.php');
+        // remove_submenu_page('upload.php', 'media-new.php');
+        // remove_submenu_page('upload.php', 'upload.php?page=wp-smush-bulk');
+
+        // Page
+        // remove_menu_page('edit.php?post_type=page');
+        // remove_submenu_page('edit.php?post_type=page', 'post-new.php?post_type=page');
+
+        // Comments
+        // remove_menu_page('edit-comments.php');
+
+        // Tools
+        remove_menu_page('tools.php');
+
+        // Remove plugins
+        remove_menu_page('plugins.php');
+
+        // Remove Extras
+        remove_menu_page('elementor');
+        remove_menu_page('pixelgrade_care');
+        remove_menu_page('eael-settings');
+        remove_menu_page('sucuriscan');
+
+        // Settings
+        // remove_menu_page('options-general.php');
+    }
+}
+add_action('admin_head', 'hide_menu');
