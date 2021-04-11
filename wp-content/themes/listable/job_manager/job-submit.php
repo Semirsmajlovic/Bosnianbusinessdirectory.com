@@ -6,40 +6,51 @@
  * @version     1.30.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (!defined( 'ABSPATH')) {
+    exit;
+}
 
+// Job manager returns empty submitted jobs ids.
 global $job_manager;
 ?>
 
 <form action="<?php echo esc_url( $action ); ?>" method="post" id="submit-job-form" class="job-manager-form" enctype="multipart/form-data">
 
-	<?php
-	if ( isset( $resume_edit ) && $resume_edit ) {
-		printf( '<p><strong>' . __( "You are editing an existing job. %s", 'wp-job-manager' ) . '</strong></p>', '<a href="?new=1&key=' . $resume_edit . '">' . __( 'Create A New Job', 'wp-job-manager' ) . '</a>' );
-	}
-	?>
+    <!-- Trigger the needed action to start the form -->
+	<?php do_action('submit_job_form_start'); ?>
 
-	<?php do_action( 'submit_job_form_start' ); ?>
-
-	<?php if ( apply_filters( 'submit_job_form_show_signin', true ) ) : ?>
-
-		<?php get_job_manager_template( 'account-signin.php' ); ?>
-
-	<?php endif; ?>
-
-	<?php if ( job_manager_user_can_post_job() || job_manager_user_can_edit_job( $job_id ) ) : ?>
+    <!-- If the user can post jobs, the allow form submissions -->
+	<?php if (job_manager_user_can_post_job() || job_manager_user_can_edit_job($job_id)): ?>
 
 		<!-- Job Information Fields -->
 		<?php do_action( 'submit_job_form_job_fields_start' );
 
+		// Grab all of the job fields
 		$all_fields = $job_fields;
-		if ( $company_fields ) {
+
+		// Grab all of the company fields
+		if ($company_fields) {
 			$all_fields = $job_fields + $company_fields;
 		}
 
-		uasort( $all_fields, 'listable_sort_array_by_priority' ); ?>
+		$new_all_fields = [
+            'job_title' => $all_fields['job_title'],
+            'company_owner' => $all_fields['company_owner'],
+            'company_email' => $all_fields['company_email'],
+            'job_location' => $all_fields['job_location'],
+            'company_tagline' => $all_fields['company_tagline'],
+            'job_description' => $all_fields['job_description'],
+            'job_hours' => $all_fields['job_hours'],
+            'company_phone' => $all_fields['company_phone'],
+            'company_website' => $all_fields['company_website'],
+            'company_instagram' => $all_fields['company_instagram'],
+            'company_facebook' => $all_fields['company_facebook'],
+            'job_category' => $all_fields['job_category'],
+            'main_image' => $all_fields['main_image']
+        ];
+		?>
 
-		<?php foreach ( $all_fields as $key => $field ) : ?>
+		<?php foreach ( $new_all_fields as $key => $field ) : ?>
 			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
 				<label for="<?php echo esc_attr( $key ); ?>">
 					<?php
