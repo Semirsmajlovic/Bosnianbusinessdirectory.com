@@ -980,7 +980,7 @@ class Front_Page_Listing_Categories_Widget extends WP_Widget {
 		}
 
 		$all_terms = get_terms(
-			'job_listing_category',
+			'job_listing_type',
 			$query_args
 		);
 
@@ -1090,7 +1090,7 @@ class Front_Page_Listing_Categories_Widget extends WP_Widget {
 								'orderby'          => 'rand',
 								'tax_query'      => array(
 									array(
-										'taxonomy' => 'job_listing_category',
+										'taxonomy' => 'job_listing_type',
 										'field'    => 'slug',
 										'terms'    => $term->slug
 									),
